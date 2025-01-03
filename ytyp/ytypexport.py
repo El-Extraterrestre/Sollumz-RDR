@@ -106,6 +106,8 @@ def create_entity_xml(entity: MloEntityProperties) -> ymapxml.Entity:
     entity_xml.ambient_occlusion_multiplier = entity.ambient_occlusion_multiplier
     entity_xml.artificial_ambient_occlusion = entity.artificial_ambient_occlusion
     entity_xml.tint_value = entity.tint_value
+    entity_xml.blend_age_layer = entity.blend_age_layer
+    entity_xml.blend_age_dirt = entity.blend_age_dirt
 
     lod_level = next(name for name, value in vars(
         EntityLodLevel).items() if value == (entity.lod_level))

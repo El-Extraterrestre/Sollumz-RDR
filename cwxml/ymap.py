@@ -429,6 +429,8 @@ class Entity(ElementTree):
         self.artificial_ambient_occlusion = ValueProperty(
             "artificialAmbientOcclusion", 0)
         self.tint_value = ValueProperty("tintValue", 0)
+        self.blend_age_layer = ValueProperty("blendAgeLayer", 0)
+        self.blend_age_dirt = ValueProperty("blendAgeDirt", 0)
 
 
 class EntityList(ListPropertyRequired):

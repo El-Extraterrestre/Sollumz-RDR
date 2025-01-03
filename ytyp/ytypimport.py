@@ -59,6 +59,8 @@ def create_entity_set_entity(entity_xml: ymapxml.Entity, entity_set: EntitySetPr
     entity.ambient_occlusion_multiplier = entity_xml.ambient_occlusion_multiplier
     entity.artificial_ambient_occlusion = entity_xml.artificial_ambient_occlusion
     entity.tint_value = entity_xml.tint_value
+    entity.blend_age_layer = entity_xml.blend_age_layer
+    entity.blend_age_dirt = entity_xml.blend_age_dirt
 
     for extension_xml in entity_xml.extensions:
         create_extension(extension_xml, entity)

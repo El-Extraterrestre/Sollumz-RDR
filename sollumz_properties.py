@@ -610,6 +610,10 @@ class EntityProperties:
     artificial_ambient_occlusion: bpy.props.FloatProperty(
         name="Artificial Ambient Occlusion", default=255)
     tint_value: bpy.props.FloatProperty(name="Tint Value")
+    blend_age_layer: bpy.props.FloatProperty(
+        name="Blend Age Layer", default=255)
+    blend_age_dirt: bpy.props.FloatProperty(
+        name="Blend Age Dirt", default=255)
 
 
 class ObjectEntityProperties(bpy.types.PropertyGroup, EntityProperties):

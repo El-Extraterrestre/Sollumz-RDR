@@ -61,7 +61,7 @@ class BaseArchetype(ElementTree):
         self.extensions = ExtensionsList()
         if current_game == SollumzGame.RDR:
             self.guid = ValueProperty("guid")
-            self.unknown_1 = TextProperty("iypiqkia_0x07d164a8")
+            self.unknown_1 = TextProperty("zqNiUDA_0x07D164A8")
 
 class TimeArchetype(BaseArchetype):
     def __init__(self):
