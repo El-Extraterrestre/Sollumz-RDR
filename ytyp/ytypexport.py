@@ -92,6 +92,8 @@ def create_entity_xml(entity: MloEntityProperties) -> ymapxml.Entity:
     """Create xml mlo entity from an entity data-block."""
 
     entity_xml = ymapxml.Entity()
+    if current_game == SollumzGame.RDR:
+        entity_xml = ymapxml.EntityRDR()
     entity_obj = entity.linked_object
     if entity_obj:
         set_entity_xml_transforms_from_object(entity_obj, entity_xml)
@@ -106,8 +108,9 @@ def create_entity_xml(entity: MloEntityProperties) -> ymapxml.Entity:
     entity_xml.ambient_occlusion_multiplier = entity.ambient_occlusion_multiplier
     entity_xml.artificial_ambient_occlusion = entity.artificial_ambient_occlusion
     entity_xml.tint_value = entity.tint_value
-    entity_xml.blend_age_layer = entity.blend_age_layer
-    entity_xml.blend_age_dirt = entity.blend_age_dirt
+    if isinstance(entity_xml, ymapxml.EntityRDR):
+        entity_xml.blend_age_layer = entity.blend_age_layer
+        entity_xml.blend_age_dirt = entity.blend_age_dirt
 
     lod_level = next(name for name, value in vars(
         EntityLodLevel).items() if value == (entity.lod_level))

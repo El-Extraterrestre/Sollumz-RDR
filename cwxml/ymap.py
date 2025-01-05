@@ -1,6 +1,7 @@
 from abc import ABC as AbstractClass, abstractmethod
 from typing import Union, Type
 from xml.etree import ElementTree as ET
+from ..sollumz_properties import SollumzGame
 from .element import (
     AttributeProperty,
     ElementProperty,
@@ -18,6 +19,7 @@ from .element import (
     Vector4Property,
 )
 
+current_game = SollumzGame.GTA
 
 class YMAP:
 
@@ -25,6 +27,11 @@ class YMAP:
 
     @staticmethod
     def from_xml_file(filepath):
+        global current_game
+        if ".rsc" in filepath:
+            current_game = SollumzGame.RDR
+        else:
+            current_game = SollumzGame.GTA
         return CMapData.from_xml_file(filepath)
 
     @staticmethod
@@ -429,6 +436,11 @@ class Entity(ElementTree):
         self.artificial_ambient_occlusion = ValueProperty(
             "artificialAmbientOcclusion", 0)
         self.tint_value = ValueProperty("tintValue", 0)
+
+
+class EntityRDR(Entity):
+    def __init__(self):
+        super().__init__()
         self.blend_age_layer = ValueProperty("blendAgeLayer", 0)
         self.blend_age_dirt = ValueProperty("blendAgeDirt", 0)
 
@@ -436,6 +448,11 @@ class Entity(ElementTree):
 class EntityList(ListPropertyRequired):
     list_type = Entity
     tag_name = "entities"
+
+    def __init__(self, current_game):
+        if current_game == SollumzGame.RDR:
+            self.list_type = Entity
+        super().__init__()
 
 
 class ContainerLodsList(ElementTree):
@@ -638,7 +655,7 @@ class CMapData(ElementTree, AbstractClass):
         self.streaming_extents_max = VectorProperty("streamingExtentsMax")
         self.entities_extents_min = VectorProperty("entitiesExtentsMin")
         self.entities_extents_max = VectorProperty("entitiesExtentsMax")
-        self.entities = EntityList()
+        self.entities = EntityList(current_game)
         self.container_lods = ContainerLodsList()
         self.box_occluders = BoxOccludersList()
         self.occlude_models = OccludeModelsList()
