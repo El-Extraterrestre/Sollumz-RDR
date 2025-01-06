@@ -51,8 +51,9 @@ class SOLLUMZ_PT_YTYP_LIST_PANEL(bpy.types.Panel):
         row.operator("sollumz.importytyp", icon="IMPORT")
         row.operator("sollumz.exportytyp", icon="EXPORT")
         selected_ytyp = get_selected_ytyp(context)
-        row = list_col.row()
-        row.label(text=SOLLUMZ_UI_NAMES[selected_ytyp.game])
+        if selected_ytyp:
+            row = list_col.row()
+            row.label(text=SOLLUMZ_UI_NAMES[selected_ytyp.game])
 
 
 class SOLLUMZ_PT_import_ytyp(bpy.types.Panel, SollumzFileSettingsPanel):
