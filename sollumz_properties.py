@@ -626,17 +626,19 @@ def updateSceneSollumzGame(self, context):
     context.scene.sollum_collision_material_game_type = context.scene.sollum_game_type
 
 def register():
+    from .sollumz_preferences import get_addon_preferences
+    preferences = get_addon_preferences(bpy.context)
     bpy.types.Object.sollum_game_type = bpy.props.EnumProperty(
         items=items_from_enums(SollumzGame),
         name="Sollumz Game",
-        default=SollumzGame.GTA,
+        default=preferences.default_game,
         options={"HIDDEN"}
     )
 
     bpy.types.Scene.sollum_game_type = bpy.props.EnumProperty(
         items=items_from_enums(SollumzGame),
         name="Sollumz Game",
-        default=SollumzGame.GTA,
+        default=preferences.default_game,
         options={"HIDDEN"},
         update=updateSceneSollumzGame
     )
