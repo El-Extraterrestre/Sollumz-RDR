@@ -351,6 +351,51 @@ class ExtensionProcObject(Extension):
         self.max_z_offset = ValueProperty("maxZOffset")
         self.object_hash = ValueProperty("objectHash")
         self.flags = ValueProperty("flags")
+    
+
+class StepInstance(ElementTree):
+    tag_name = "Item"
+
+    def __init__(self):
+        super().__init__()
+        self.position = VectorProperty("position")
+        self.width = ValueProperty("width")
+        self.depth = ValueProperty("depth")
+        self.height = ValueProperty("height")
+        self.forward = VectorProperty("forward")
+        self.right = VectorProperty("right")
+
+
+class StepInstanceList(ListProperty):
+    list_type = StepInstance
+    tag_name = "steps"
+    item_type = "qbgDfAA_0xA15F529D"
+
+    def __init__(self, tag_name=None, value=None):
+        super().__init__(tag_name, value)
+        self.item_type = AttributeProperty("itemType", self.item_type)
+
+    @staticmethod
+    def from_xml(element: ET.Element):
+        new = StepInstanceList()
+        for child in element.iter():
+            if len(child.attrib) <= 0:
+                step = StepInstance
+                new.value.append(step.from_xml(child))
+                
+        return new
+
+
+class ExtensionStairs(Extension):
+    type = "CExtensionDefStairs"
+
+    def __init__(self):
+        super().__init__()
+        self.bottom = VectorProperty("bottom")
+        self.top = VectorProperty("top")
+        self.bound_min = VectorProperty("boundMin")
+        self.bound_max = VectorProperty("boundMax")
+        self.steps = StepInstanceList()
 
 
 class ExtensionsList(ListProperty):
@@ -389,6 +434,8 @@ class ExtensionsList(ListProperty):
             return ExtensionProcObject
         elif ext_type == ExtensionScriptEntityId.type:
             return ExtensionScriptEntityId
+        elif ext_type == ExtensionStairs.type:
+            return ExtensionStairs
 
         return None
 

@@ -2,6 +2,7 @@ import bpy
 from typing import Union
 
 from mathutils import Vector, Quaternion
+from math import atan2
 
 from ..cwxml import ytyp as ytypxml, ymap as ymapxml
 from ..sollumz_properties import ArchetypeType, AssetType, EntityLodLevel, EntityPriorityLevel, SollumzGame, MapEntityType
@@ -177,6 +178,12 @@ def set_extension_props(extension_xml: ymapxml.Extension, extension: ExtensionPr
 
     ignored_props = getattr(extension_properties.__class__, "ignored_in_import_export", None) # see LightShaftExtensionProperties
 
+    if type(extension_xml) == ymapxml.ExtensionStairs:
+        extension_xml.bottom -= extension_xml.offset_position
+        extension_xml.top -= extension_xml.offset_position
+        extension_xml.bound_min -= extension_xml.offset_position
+        extension_xml.bound_max -= extension_xml.offset_position
+
     for prop_name in extension_properties.__class__.__annotations__:
         if ignored_props is not None and prop_name in ignored_props:
             continue
@@ -208,6 +215,17 @@ def set_extension_props(extension_xml: ymapxml.Extension, extension: ExtensionPr
         elif prop_name == "flashiness":
             # `flashiness` is now an enum property, we need the enum as string
             prop_value = Flashiness(prop_value).name
+
+        elif prop_name == "steps":
+            for step in extension_xml.steps:
+                new_step = extension_properties.new_step()
+                step.rotation = atan2(step.forward.y, step.forward.x)
+                step.position -= extension_xml.offset_position
+                for name in new_step.step_properties.__class__.__annotations__:
+                    val = getattr(step, name)
+                    if val:
+                        setattr(new_step.step_properties, name, val)
+            continue
 
 
         setattr(extension_properties, prop_name, prop_value)
